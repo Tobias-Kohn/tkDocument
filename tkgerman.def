@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Part of "tkDocument.cls".                                               %%
+%%                                                                           %%
+%%   Definitions and extensions for the german language.                     %%
+%%                                                                           %%
+%%     (c) 2011-2013, Tobias Kohn                                            %%
+%%                                                                           %%
+%%   Last Change: 09. Apr 2014                                               %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\def\MonthName#1{%
+  \ifcase#1\or Januar\or Februar\or M\"arz\or April\or Mai\or Juni\or Juli%
+  \or August\or September\or Oktober\or November\or Dezember\fi%
+}
+\def\NumberName#1{%
+  \expandafter\ifcase#1\relax Null\or Eins\or Zwei\or Drei\or Vier%
+  \or F{\"u}nf\or Sechs\or Sieben\or Acht\or Neun\or Zehn\or Elf\or Zw{\"o}lf%
+  \or Dreizehn\or Vierzehn\or F{\"u}nfzehn\or Sechzehn\or Siebzehn\or Achtzehn%
+  \or Neunzehn\or Zwanzig\or Einundzwanzig\or Zweiundzwanzig\or Dreiundzwanzig%
+  \or Vierundzwanzig\or F{\"u}nfundzwanzig\or Sechsundzwanzig%
+  \or Siebenundzwanzig\or Achtundzwanzig\or Neunundzwanzig\or Dreissig\fi%
+}
+\def\numberName#1{%
+  \expandafter\ifcase#1\relax null\or eins\or zwei\or drei\or vier%
+  \or f{\"u}nf\or sechs\or sieben\or acht\or neun\or zehn\or elf\or zw{\"o}lf%
+  \or dreizehn\or vierzehn\or f{\"u}nfzehn\or sechzehn\or siebzehn\or achtzehn%
+  \or neunzehn\or zwanzig\or einundzwanzig\or zweiundzwanzig\or dreiundzwanzig%
+  \or vierundzwanzig\or f{\"u}nfundzwanzig\or sechsundzwanzig%
+  \or siebenundzwanzig\or achtundzwanzig\or neunundzwanzig\or dreissig\fi%
+}
+\def\@chappname{Anhang}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

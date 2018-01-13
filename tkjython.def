@@ -1,0 +1,439 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Part of "tkDocument.cls".                                               %%
+%%                                                                           %%
+%%   Definitions for the substyle "jython".                                  %%
+%%                                                                           %%
+%%     (c) 2011-2016, Tobias Kohn                                            %%
+%%                                                                           %%
+%%   Last Change: 12. Dec 2016                                               %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+\RequirePackage[hidelinks]{hyperref}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Set up the basic layout.                                                %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Load the fonts.
+%%
+\if@XeTeX
+  \setsansfont[Scale=MatchLowercase]{Arial}
+\else
+  \RequirePackage{charter}
+  \RequirePackage[scaled]{helvet}
+\fi
+%%
+%%  Set the pages' geometry.
+%%
+%%  Slightly smaller borders for large fonts (12pt).
+%%
+\if\@ptsize2
+  \geometry{right=1.5in, left=2in, top=1.25in, bottom=1.875in}
+  \scalecaptiongraphics
+\else
+  \geometry{right=1.5in, left=2.5in, top=1.25in, bottom=1.875in}
+\fi
+%%
+%%  Additional colors.
+%%
+\definecolor{dark_orange}{rgb}{0.75, 0.4, 0}
+\definecolor{light_orange}{rgb}{1, 0.9, 0.5}
+\definecolor{ultralight_orange}{rgb}{1, 0.96, 0.7}
+\definecolor{dark_maroon}{rgb}{0.375, 0.125, 0}
+%%
+%%  Define the header and footer for the document.
+%%
+\newdimen\jython@hdrwidth
+\jython@hdrwidth\fulltextwidth
+\advance\jython@hdrwidth-.5in
+\def\@oddheader#1#2{\small%
+  \hskip-\oddsidemargin
+  {\color{light_#1}\rule[-.75ex]{\jython@hdrwidth}{3ex}}%
+  \llap{\hbox to \jython@hdrwidth{\itshape\ #2\strut\hfill}}%
+  {\color{dark_#1}\rule[-.75ex]{.5in}{3ex}}%
+  \llap{\hbox to .5in{\color{white}\bfseries\sffamily\hfil\thepage\strut\hfil}}%
+}
+\def\@evenheader#1#2{\small%
+  \hskip-\evensidemargin
+  {\color{dark_#1}\rule[-.75ex]{.5in}{3ex}}%
+  \llap{\hbox to .5in{\color{white}\bfseries\sffamily\hfil\thepage\strut\hfil}}%
+  {\color{light_#1}\rule[-.75ex]{\jython@hdrwidth}{3ex}}%
+  \llap{\hbox to \jython@hdrwidth{\itshape\ #2\strut\hfill}}
+}
+\def\ps@headings{
+  \def\@oddhead{\@oddheader{orange}{\ \rightmark}}
+  \def\@evenhead{\@evenheader{orange}{\ \leftmark}}
+  \let\@oddfoot=\copyright@foot
+  \let\@evenfoot=\copyright@foot
+}
+%%  No page number on chapter pages at all:
+\def\ps@plain{
+  \let\@oddhead=\relax
+  \let\@evenhead=\relax
+  \let\@oddfoot=\copyright@foot
+  \let\@evenfoot=\copyright@foot
+}
+%%
+\pagestyle{headings}
+%%
+%%  Paragraph indentation off and some space between paragraphs.
+%%
+\setlength\parskip{2ex plus 1ex minus .5ex}
+\setlength\parindent{0pt}
+\linespread{1.1}
+%%
+%%  Marginpars.
+%%
+\reversemarginpar
+\marginformat{format=\small\linespread{1.05}\itshape}
+%%
+%%  Entries in the table of contents should be closer together than the
+%%  paragraphs in the main text.
+%%
+\let\@tableofcontents=\tableofcontents
+\def\tableofcontents{{%
+  \setlength\parskip{0pt}%
+  \@tableofcontents
+}}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Titlepage.                                                              %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\def\@impressum{Copyright \copyright\ \the\year,\\\@author}
+\long\def\impressum#1{\global\def\@impressum{#1}}
+\def\maketitle{%
+  \newpage
+    \thispagestyle{empty}
+	\null
+	\vskip1.75in
+	\begin{fullwidth}
+	\sffamily
+	{\color{maroon}
+    {\Huge\@title\par}
+	\ifx\@subtitle\relax\else
+	  \vskip2.5ex
+      {\Large\@subtitle\\}
+	\fi}
+	{\color{dark_orange}\rule{\linewidth}{1.2pt}}
+	\vskip3ex
+    {\itshape\large\@author}
+	\end{fullwidth}
+  \newpage
+    \thispagestyle{empty}
+    \null
+    \vfill
+    \@impressum
+  \newpage
+  \if@tk@book\else%
+    \markboth{\@title}{\@title}%
+	\let\sectionmark=\markright%
+  \fi
+}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Chapter- and section headings.                                          %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Section headings:
+%%
+\def\jython@indent{-\sidemargin\ifodd\thepage\else\hskip.5in\fi}
+\def\jython@section#1#2{%
+  \vbox{%
+    \hbox{\sffamily\huge\color{maroon}#1#2}%
+	%\hbox{\color{dark_orange}\rule{\jython@hdrwidth}{1pt}}%
+	%\vskip-8pt%
+    \hbox{\color{light_orange}\rule{\jython@hdrwidth}{5pt}}%
+  }%
+  %\if@tk@book\else\markright{#1#2}\fi%
+}
+%%
+%%  Subsections:
+%%
+\def\jython@subsection#1{%
+  \hbox to \linewidth{\vbox{%
+    \hbox{\sffamily\LARGE\color{maroon}#1}%
+    \hbox{\color{light_orange}\rule[2ex]{\linewidth}{2pt}}%
+  }}%
+}
+%%
+%%  Paragraph headings:
+%%
+\def\jython@paragraph#1{%
+  \sffamily\bfseries\color{maroon}#1\hskip 2ex minus .5ex%\rule{1.5pt}{1.5ex}\hskip0pt plus 3ex\relax%
+}
+%%
+\sectionformat{custom=\jython@section, indent=\jython@indent, above=0pt\clearpage, number=\arabic{section}\quad}
+\subsectionformat{format=\jython@subsection, number=}
+\paragraphformat{format=\jython@paragraph}
+%%
+%%  Chapter headings:
+%%
+\pgfdeclareverticalshading{chaptergradient}{\fulltextwidth}%
+  {rgb(0cm)=(1,1,1); rgb(1.21in)=(1, 0.9, 0.5)}
+%%
+\def\write@chapter@aux#1{%
+  \XspreadLetters{2in}{#1}%
+}
+\def\write@chapter[#1]#2{%
+  \ifx\relax#1\relax\null\vskip-4ex\fi
+  \null\vskip-.5in
+  \begin{fullwidth}
+  \leavevmode
+  \hbox to 0pt{\pgfuseshading{chaptergradient}}%
+   \raise.5in\hbox to \fulltextwidth{\hfill\Huge\sffamily\color{maroon}%
+     \MakeUppercase{#2}%
+	 \hfill}
+   \vskip-1.2in\vskip-3ex
+  \hbox{\color{dark_orange}
+    \rule[-3pt]{\fulltextwidth}{2pt}%
+	\ifx\relax#1\relax\else
+	  \if@appendix%
+	    \edef\tk@chapter@text{\@chapapp\thechapter}%
+	  \else%
+	    \edef\tk@chapter@text{\@chapapp\expandafter\NumberName\expandafter{\thechapter}}%
+	  \fi%
+      \llap{\hbox to \linewidth{\sffamily\bfseries
+	  \expandafter\write@chapter@aux\expandafter{\tk@chapter@text}%
+	  \hfill}}
+	\fi
+  }
+  \end{fullwidth}
+  \vskip1.25in plus 0.25in\relax
+}
+%%
+%%
+\def\caption@text@format{\sffamily}
+\def\caption@type@format{\sffamily\color{maroon}}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Lernziele and exercises.                                                %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Use "Lernziele" to specify the goals of a section.
+%%
+\def\Lernziele{%
+  \sffamily
+  \textrule{\textcolor{maroon}{\textbf{Lernziele}\ %
+  In diesem Abschnitt lernst du:}}{light_orange}{1.2pt}
+  \begin{list}{\textcolor{maroon}{$\triangleright$}}{%
+    \setlength\topsep{1ex}
+	\setlength\partopsep{0pt}
+	\setlength\parskip{0pt}
+	\setlength\itemsep{.125ex}
+  }
+}
+\def\endLernziele{%
+  \end{list}
+  {\color{light_orange}\rule[2ex]{\linewidth}{1.2pt}}\par
+}
+%%
+%%  The environment "Aufgaben" is used to add exercises at the end of a
+%%  section and will numerate these continuosly. However, the counter
+%%  starts anew in every chapter.
+%%
+\if@tk@book
+  \newcounter{aufgaben}[chapter]
+  \renewcommand\theaufgaben{\thechapter.\arabic{aufgaben}}
+\else
+  \newcounter{aufgaben}
+\fi
+\def\aufgaben@item#1{%
+  \textcolor{maroon}{\bfseries\sffamily\arabic{#1}.%\csname the#1\endcsname.%
+  \if@jython@star\raise.5ex\hbox{$\ast$}\fi\hfill}%
+}
+\def\@Aufgaben#1{%
+  \begin{list}{\aufgaben@item{#1}}{
+    \setlength\topsep{4pt}
+	\setlength\leftmargin{0pt}
+	\setlength\labelsep{1ex}
+	\setlength\itemindent{3ex}
+	\setlength\labelwidth{2ex}
+	\@usecounter{#1}
+    \advance\@enumdepth1\relax
+	\newif\if@jython@star
+	\let\jython@item=\item
+	\def\jython@item@*{\global\@jython@startrue\jython@item}
+	\def\item{\global\@jython@starfalse\@ifnextchar*\jython@item@\jython@item}
+  }
+}
+\def\Aufgaben{%
+  \vfill
+  \textrule{\textbf{\sffamily\color{maroon}AUFGABEN}}{light_orange}{1.2pt}
+  \@Aufgaben{aufgaben}
+}
+\def\endAufgaben{%
+  \end{list}
+  \noindent{\color{light_orange}\rule[2ex]{\linewidth}{1.2pt}}%
+}
+%%
+%%  "ChapterTest" is almost identical to "Aufgaben" except for that we do
+%%  not print the lines and the heading "AUFGABEN".
+%%
+\newcounter{CTaufgaben}
+\def\ChapterTest{\@Aufgaben{CTaufgaben}\setlength\itemsep{.25in}}
+\def\endChapterTest{\end{list}}
+%%
+%%  An environment for the most important points or a short summary.
+%%
+\def\wichtig{\paragraph{Die wichtigsten Punkte}}
+\let\endwichtig=\relax
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Quiz-boxes.                                                             %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\newbox\tk@tempboxA
+\newdimen\tk@tempdimenA
+\newdimen\tk@tempdimenB
+\def\@printquiz#1{%
+  \setbox\tk@tempboxA=\hbox{\bfseries\Large\strut}
+  \tk@tempdimenA=-\ht\tk@tempboxA
+  \advance\tk@tempdimenA 1pt
+  \setbox\tk@tempboxA=\vbox{%
+    \hbox{\textrule{\textcolor{dark_orange}{\bfseries\Large\itshape Quiz\ }}{dark_orange}{1.2pt}}
+	\hbox{#1}
+	\hbox{\color{dark_orange}\rule[1ex]{\linewidth}{1.2pt}}
+  }
+  \tk@tempdimenB=\ht\tk@tempboxA
+  \advance\tk@tempdimenB\tk@tempdimenA
+  \advance\tk@tempdimenB-2pt
+  \vbox to 0pt{\color{ultralight_orange}\rule{\linewidth}{\tk@tempdimenB}}
+  \vskip\tk@tempdimenA
+  \usebox\tk@tempboxA
+}
+\def\beginquiz{%
+  \tk@quizwidth\textwidth
+  \advance\tk@quizwidth-2ex
+}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Python-code should be printed formatted.                                %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\if@XeTeX\else
+  \RequirePackage{courier}
+\fi
+\RequirePackage[procnames]{listings}
+%%
+%%  We define some colors trying to mimic TigerJython. 
+%%
+\definecolor{keywordclr}{rgb}{0, 0.2, 0.667}      
+\definecolor{fnctionclr}{rgb}{0.467, 0, 0.533}
+\definecolor{builtinclr}{rgb}{0.467, 0, 0.533}
+\definecolor{symbolsclr}{rgb}{0.5, 0.25, 0.25}   
+\definecolor{commentclr}{rgb}{0, 0.5, 0}       
+\definecolor{stringsclr}{rgb}{0.8, 0.4, 0}     
+\definecolor{numbersclr}{rgb}{0.8, 0.2, 0}
+\definecolor{bckgrndclr}{rgb}{0.91, 0.95, 0.95}%{0.94, 0.96, 0.96}
+%%
+%%  We define a new language 'Jython'. We also want strings over
+%%  multiple lines to be formatted as strings and not as comments.
+%%
+\lstdefinelanguage{Jython}%
+  { morekeywords={None,and,as,assert,break,class,continue,def,del,elif,%
+      else,except,finally,for,from,global,if,import,in,is,lambda,nonlocal,%
+      not,or,pass,print,raise,return,try,while,with,yield,repeat},%
+    moreprocnamekeys={class,def},%
+    %%  We use 'classoffset=1' to add built in functions (__builtins__)
+    classoffset=1,%
+    morekeywords={Exception,False,True,abs,all,any,ascii,bin,bool,bytearray,%
+      bytes,callable,chr,classmethod,compile,complex,copyright,delattr,dict,%
+      dir,divmod,enumerate,eval,exec,exit,float,format,frozenset,getattr,%
+      globals,hasattr,hash,help,hex,id,input,int,isinstance,issubclass,iter,%
+      len,license,list,locals,map,max,min,next,object,oct,open,ord,pow,%
+      property,quit,range,repr,reversed,round,set,setattr,slice,sorted,%
+      staticmethod,str,sum,super,tuple,type,vars,zip,inputInt,inputFloat,%
+	  inputString,msgDlg,askYesNo,enum,clrScr,head,tail,indices,self},%
+    classoffset=0,%
+    sensitive=true,%
+    showstringspaces=false,%
+    morecomment=[l]\#,%
+    morestring=[b]',%
+    morestring=[b]",%
+    morestring=[b]{'''},%
+    morestring=[b]{"""}%
+  }
+%%
+%%  Set 'Jython' as default language and set all the colors and
+%%  styles.
+%%
+\lstset{language=Jython,% 
+  extendedchars=true,%
+  belowskip=0pt,%
+  framexleftmargin=2pt,%
+  framexrightmargin=2pt,%
+  numbers=none,%
+  basicstyle=\ttfamily\small,%
+  numberstyle=\scriptsize,%
+  keywordstyle=\color{keywordclr}\bfseries,% 
+  stringstyle=\color{stringsclr},%
+  commentstyle=\color{commentclr}\itshape,%
+  %procnamestyle=\color{fnctionclr},%
+  tabsize=4,%
+  classoffset=1,%
+  keywordstyle=\color{builtinclr},%
+  classoffset=0,
+  backgroundcolor=\color{bckgrndclr}%
+}
+%%
+%%  We define an environment 'python' for convenience.
+%%
+\lstnewenvironment{python}[1][4]{%
+  \lstset{language=Jython, gobble=#1,%
+          moredelim=[is][\itshape]{|}{|}}%
+}{}
+\lstnewenvironment{pythonraw}[1][4]{%
+  \lstset{language=Jython, gobble=#1}%
+}{}
+\lstnewenvironment{pythonln}[1][4]{%
+  \lstset{language=Jython, gobble=#1, numbers=left}%
+}{}
+\lstnewenvironment{pythonnb}[1][4]{%
+  \lstset{language=Jython, gobble=#1, backgroundcolor=,%
+          moredelim=[is][\itshape]{|}{|}}%
+}{}
+%%
+%%  Use § to switch between code and normal text similar to the math-
+%%  shift $. However, it is not possible to provide this shortcut
+%%  macro with the "inputenc[utf8]"-package!
+%%
+\if@XeTeX
+  \if@utfinput
+    \lstMakeShortInlineÂ§
+  \else
+    \lstMakeShortInline§
+  \fi
+\else\if@utfinput\else
+  \lstMakeShortInline§
+\fi\fi
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
