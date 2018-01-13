@@ -1,0 +1,98 @@
+\documentclass[article, jython]{tkDocument}
+%% ‰ÈÙ‹
+
+\title{Turtle-graphics}
+\author{Tobias~Kohn}
+
+\begin{document}
+
+\maketitle
+
+
+  While walking around on your screen, the \emph{turtle} leaves a visible trace. By telling the
+  turtle how to move--such as ``turn left'' or ``go forward five steps'', you determine the 
+  figure it is drawing.
+  
+  \emph{This is just a very small sample of a larger script, meant to display how to use the
+  \texttt{tkDocument}-template.}
+  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Moving the Turtle}
+
+\begin{Lernziele}
+
+  \item to write simple programs, and draw graphics using turtle graphics.
+  \item to move the turtle using the commands ßleftß, ßrightß, and ßforwardß.
+
+\end{Lernziele}
+  \index{left}\index{right}\index{forward}\index{turtle}
+
+
+  \paragraph{Introduction}
+  Your first programs will be a sequence of instructions for the turtle. Once you have completed
+  writing your program, the turtle will follow your program line by line and obey each instruction---
+  as long as it understands what you want it to do.
+
+  However, since the turtle is really not that clever, you must be very careful with your
+  instructions. Even small typing errors will cause the turtle to be lost, and it will immediately
+  stop executing your program.
+
+
+  \paragraph{The Program}
+  This is your first program. Enter the commands into the editor, make sure you get all the spaces
+  and case right, and then execute the program by clicking the green ``play''-button. The turtle
+  should then draw a right-angled triangle.
+  \index{gturtle}\index{import}\index{makeTurtle}
+  \begin{pythonln}
+    from gturtle import *
+    
+    makeTurtle()
+    
+    forward(120 * 1.414216)
+    left(135)
+    forward(120)
+    left(90)
+    forward(120)
+  \end{pythonln}
+  In order to use the turtle, you must first load the file (called a ``module'' in Python) containing 
+  the turtle and its commands. This file is called ``gturtle''. Once you have loaded the module (using
+  ßimportß as in the first line above), use ßmakeTurtle()ß to open a window for the turtle to draw in.
+  \index{module}
+
+  
+\clearpage
+  
+  \begin{wichtig}
+    At the beginning of each turtle-program, you need to load the turtle-module, and open a new window:
+    \begin{pythonnb}
+      from gturtle import *
+      makeTurtle()
+    \end{pythonnb}
+    Afterwards, you are free to combine as many instructions to the turtle as you like. Each instruction
+    has to be written on a line of its own.
+    Some of the instructions the turtle will always understand are as follows:
+    \index{speed}\index{dot}\index{back}
+    
+    \begin{tabular}{@{}ll@{}}
+    \hline
+      ßforward(s)ß  & Move $s$ pixels forward. \\
+      ßback(s)ß     & Move $s$ pixels back. \\
+      ßleft(w)ß     & Turn by $w$ degrees left. \\
+      ßright(w)ß    & Turn by $w$ degrees right. \\
+      ßdot(d)ß      & Paint a dot with a diameter of $d$ pixels. \\
+      ßspeed(-1)ß   & Make the turtle as fast as possible. \\
+    \hline
+    \end{tabular}
+  \end{wichtig}
+
+
+\begin{Aufgaben}
+
+\item
+  Have the turtle draw a square or a small house.
+
+\end{Aufgaben}
+
+\end{document}
