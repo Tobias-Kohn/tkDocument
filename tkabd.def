@@ -1,0 +1,246 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Part of "tkDocument.cls".                                               %%
+%%                                                                           %%
+%%   Definitions for the substyle "abd".                                     %%
+%%                                                                           %%
+%%     (c) 2011-2013, Tobias Kohn                                            %%
+%%                                                                           %%
+%%   Last Change: 28. Jan 2014                                               %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Set up the basic layout.                                                %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Load the fonts.
+%%
+\if@XeTeX
+  \setsansfont[Scale=MatchLowercase]{Arial}
+\else
+  \RequirePackage{charter}
+  \RequirePackage[scaled]{helvet}
+\fi
+%%
+%%  Set the pages geometry.
+%%
+\geometry{left=2.75in, marginparwidth=1.25in, marginparsep=.5in}
+%%
+%%  Additional colors.
+%%
+\definecolor{abdblue}{rgb}{0.92, 0.96, 1.0}
+\definecolor{abdgreen}{rgb}{0, 0.5, 0.3}
+\definecolor{abdteal}{rgb}{0, 0.2, 0.4}
+\definecolor{abdpeach}{rgb}{1, 0.875, 0.75}
+%%
+%%  Define the header and footer for the document.
+%%
+\def\@copyrightmark{\copyright\ \the\year, \@author}
+\def\copyrightmark#1{\def\@copyrightmark{#1}}
+%%
+\def\print@head{%
+  \ifodd\thepage
+    \hskip-\oddsidemargin\hbox to \fulltextwidth{%
+	  \sffamily{\scriptsize\@copyrightmark}\hfill
+	  \textbf{\small\rightmark\qquad\thepage}%
+	}
+  \else
+    \hskip-\evensidemargin\hbox to \fulltextwidth{%
+	  \sffamily\textbf{\small\thepage\qquad\leftmark}\hfill
+	  {\scriptsize\@copyrightmark}
+	}
+  \fi
+}
+\def\ps@headings{
+  \let\@oddhead=\print@head
+  \let\@evenhead=\print@head
+  \let\@oddfoot=\relax
+  \let\@evenfoot=\relax
+}
+%%  No page number on chapter pages at all:
+\def\ps@plain{
+  \let\@oddhead=\relax
+  \let\@evenhead=\relax
+  \let\@oddfoot=\relax
+  \let\@evenfoot=\relax
+}
+%%
+\pagestyle{headings}
+%%
+%%  Paragraph indentation off and some space between paragraphs.
+%%
+\setlength\parskip{2ex plus 1.5ex minus .5ex}
+\setlength\parindent{0pt}
+\linespread{1.1}
+\reversemarginpar
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Chapter- and section headings.                                          %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Section headings:
+%%
+\def\abd@section#1#2{%
+  \vbox{%
+	\hbox{\parbox\fulltextwidth{\sffamily\huge\color{maroon}#1\color{abdteal}#2\hfill}}%
+    \hbox{\color{maroon}\rule{\fulltextwidth}{1.2pt}}}%
+}
+%%
+%%  Paragraph headings:
+%%
+\def\abd@paragraph#1{%
+  \llap{\textcolor{abdgreen}{\rule{1.5ex}{1.5ex}}\quad}%
+  \textcolor{abdteal}{\sffamily\bfseries\MakeUppercase{#1}}%
+}
+%%
+\paragraphformat{format=\abd@paragraph}
+\if@tk@book
+  \sectionformat{custom=\abd@section, indent=-\sidemargin}
+\else
+  \sectionformat{custom=\abd@section, indent=-\sidemargin, above=0pt\clearpage}
+\fi
+%%
+%%  Chapter headings:
+%%
+\pgfdeclareverticalshading{chaptergradient}{\fulltextwidth}%
+  {rgb(0cm)=(1,1,1); rgb(1.21in)=(1, 0.875, 0.75)}
+%%
+\def\write@chapter@aux#1{%
+  \XspreadLetters{3in}{#1}%
+}
+\def\write@chapter[#1]#2{%
+  \ifx\relax#1\relax\null\vskip-4ex\fi
+  \null\vskip-.5in
+  \begin{fullwidth}
+  \leavevmode
+  \hbox to 0pt{\pgfuseshading{chaptergradient}}%
+   \raise.675in\hbox to \fulltextwidth{\hfill\Huge\sffamily\color{abdteal}%
+     \MakeUppercase{#2}}
+   \vskip-1.2in\vskip-3ex\vskip.5pt
+  \hbox{\color{maroon}
+    \rule[-0.5pt]{\fulltextwidth}{.4pt}%
+	\ifx\relax#1\relax\else
+	  \edef\tk@chapter@text{\@chapapp\expandafter\NumberName\expandafter{\thechapter}}%
+      \llap{\hbox to \linewidth{\sffamily\bfseries
+	  \hfill\expandafter\write@chapter@aux\expandafter{\tk@chapter@text}}\quad}
+	\fi
+  }
+  \end{fullwidth}
+  \vskip1.25in plus 0.25in\relax
+}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Title-page.                                                             %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\let\@impressum=\relax
+\def\maketitle{%
+  \begingroup
+  \setlength\parindent{0pt}
+  \thispagestyle{empty}
+  \null\vskip.5in
+  {\sffamily\color{abdteal}
+  {\Huge\raggedright\@title\par}
+  \ifx\@subtitle\@empty\else
+    \vskip.125in
+    {\Large\raggedright\@subtitle\par}
+  \fi
+  {\color{maroon}
+  \rule{\textwidth}{1.2pt}}
+  \vskip.5in
+  {\itshape\@author\par}
+  \if@tk@book\else
+    \vskip3.25in
+	\ifx\@institute\@empty\else{\@institute\par}\fi
+    {\itshape\@date\par}
+  \fi}
+  \endgroup
+  \newpage
+  \ifx\relax\@impressum\else
+    \null\thispagestyle{empty}
+    \vfill\@impressum
+    \newpage
+    \setcounter{page}{1}
+  \fi
+}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Examples and Exercises.                                                 %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  We want to mark the begins and ends of exercises and proofs.
+%%
+\newbox\tk@markerbox
+\def\tk@beginmarker#1#2{%
+  \setbox\tk@markerbox=\hbox{\textbf{#2}}%
+  {\noindent\color{#1}%
+   \rule[2ex]{\wd\tk@markerbox}{.4pt}%
+   \llap{\box\tk@markerbox}\hskip2ex plus 1ex minus .2ex%
+  }%
+}
+\def\tk@endmarker#1#2{%
+  \ifvmode\nointerlineskip\vskip-\parskip
+  \vskip-\baselinestretch\baselineskip\hbox{\null}\fi%
+  \hfill\textcolor{#1}{#2}\par%
+}
+%%
+%%  Examples.
+%%
+\ifx\tk@lang\lang@de
+  \def\@examplename{Beispiel}
+\else
+  \def\@examplename{Example}
+\fi
+\newcounter{examples}
+\def\example{%
+  \par\refstepcounter{examples}
+  \advance\@enumdepth\@ne%
+  \tk@beginmarker{maroon}{$\triangleright$ %
+    \bfseries\@examplename\ \arabic{examples}}%
+  \def\solution{\par\textcolor{maroon}{\textbf{\@solutionname}}\hskip1.25em plus 1em minus .5em\relax}
+}
+\def\endexample{\tk@endmarker{maroon}{$\triangleleft$}\par}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                           %%
+%%                                                                           %%
+%%   Margins.                                                                %%
+%%                                                                           %%
+%%                                                                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  With '\marginnote' we draw small blue boxes for short hints that
+%%  go into the left-side margin.
+%%
+\newdimen\tkA@marginnotewidth
+\tkA@marginnotewidth\marginparwidth
+\advance\tkA@marginnotewidth-2\fboxsep
+%%
+\def\marginnote#1{\marginpar{%
+  \vbox{%
+    {\color{abdteal}\rule{\marginparwidth}{1.2pt}}\\%
+    \colorbox{abdblue}{\parbox{\tkA@marginnotewidth}{\scriptsize#1}}%
+  }%
+}}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
